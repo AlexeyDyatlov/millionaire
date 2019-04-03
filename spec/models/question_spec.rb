@@ -1,6 +1,7 @@
 require 'rails_helper'
+
 RSpec.describe Question, type: :model do
-subject { Question.new(text: 'some', level: 0, answer1: '1', answer2: '1', answer3: '1', answer4: '1') }
+  subject { Question.new(text: 'some', level: 0, answer1: '1', answer2: '1', answer3: '1', answer4: '1') }
   context 'validations check' do
     # Проверяем наличие валидации
     it { should validate_presence_of :level }
