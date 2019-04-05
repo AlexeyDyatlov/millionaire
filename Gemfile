@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.10'
 
-gem 'devise'
+gem "devise", ">= 4.6.0"
 gem 'devise-i18n'
 
 gem 'uglifier', '>= 1.3.0'
