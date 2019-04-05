@@ -79,5 +79,47 @@ RSpec.describe GamesController, type: :controller do
       # Флеш пустой
       expect(flash.empty?).to be_truthy
     end
+    # проверка, что пользовтеля посылают из чужой игры
+    it '#show alien game' do
+      # создаем новую игру, юзер не прописан, будет создан фабрикой новый
+      alien_game = FactoryBot.create(:game_with_questions)
+
+      # пробуем зайти на эту игру текущий залогиненным user
+      get :show, id: alien_game.id
+
+      expect(response.status).not_to eq(200) # статус не 200 ОК
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to be # во flash должен быть прописана ошибка
+    end
+
+    it '#take_money' do
+      game_w_questions.update_attribute(:current_level, 2)
+
+      put :take_money, id: game_w_questions.id
+
+      game = assigns(:game)
+
+      expect(response.status).to eq 302
+      expect(game.finished?).to be_truthy
+      expect(game.prize).to eq(200)
+
+      user.reload
+
+      expect(user.balance).to eq(200)
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:warning]).to be
+    end
+
+    it 'redirect to current game' do
+      expect(game_w_questions.finished?).to be_falsey
+
+      expect { post :create }.to change(Game, :count).by(0)
+
+      game = assigns(:game)
+      expect(game).to be_nil
+
+      expect(response).to redirect_to(game_path(game_w_questions))
+      expect(flash[:alert]).to be
+    end
   end
 end
