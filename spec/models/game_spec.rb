@@ -59,7 +59,8 @@ RSpec.describe Game, type: :model do
     end
 
     it '.previous_level should return previous_level number' do
-      expect(game_w_questions.previous_level).to eq(-1)
+      game_w_questions.current_level = 10
+      expect(game_w_questions.previous_level).to eq(9)
     end
   end
 
